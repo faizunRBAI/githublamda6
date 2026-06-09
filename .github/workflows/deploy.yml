@@ -126,7 +126,7 @@ jobs:
 
           # Retry up to 5 times with 10-second backoff to allow cold-start
           for i in 1 2 3 4 5; do
-            HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" --max-time 30 "${FUNCTION_URL}health/")
+            HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" --max-time 30 "${FUNCTION_URL}")
             echo "Attempt ${i}: HTTP status ${HTTP_STATUS}"
             if [[ "$HTTP_STATUS" =~ ^[23] ]]; then
               echo "Smoke test PASSED (status ${HTTP_STATUS})"
