@@ -89,6 +89,14 @@ resource "aws_lambda_function_url" "app_url" {
   }
 }
 
+resource "aws_lambda_permission" "allow_public_url" {
+  statement_id           = "AllowPublicFunctionURL"
+  action                 = "lambda:InvokeFunctionUrl"
+  function_name          = aws_lambda_function.app.function_name
+  principal              = "*"
+  function_url_auth_type = "NONE"
+}
+
 output "function_url" {
   description = "Public HTTPS endpoint for the Lambda function"
   value       = aws_lambda_function_url.app_url.function_url
