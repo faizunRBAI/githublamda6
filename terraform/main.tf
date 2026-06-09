@@ -51,6 +51,14 @@ resource "aws_iam_role_policy_attachment" "lambda_basic" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 }
 
+resource "aws_lambda_permission" "public_url" {
+  statement_id           = "AllowPublicFunctionURL"
+  action                 = "lambda:InvokeFunctionUrl"
+  function_name          = aws_lambda_function.app.function_name
+  principal              = "*"
+  function_url_auth_type = "NONE"
+}
+
 # Lambda function — zip lives in the shared TF_STATE_BUCKET
 resource "aws_lambda_function" "app" {
   function_name = "${var.project_name}-function"
@@ -87,14 +95,6 @@ resource "aws_lambda_function_url" "app_url" {
     expose_headers    = []
     max_age           = 86400
   }
-}
-
-resource "aws_lambda_permission" "allow_public_url" {
-  statement_id           = "AllowPublicFunctionURL"
-  action                 = "lambda:InvokeFunctionUrl"
-  function_name          = aws_lambda_function.app.function_name
-  principal              = "*"
-  function_url_auth_type = "NONE"
 }
 
 output "function_url" {
